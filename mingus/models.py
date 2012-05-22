@@ -11,7 +11,7 @@ class Tag(models.Model):
     description = models.TextField()
 
     def live_entry_set(self):
-        from coltrane.models import Entry
+        from mingus.models import Entry
         return self.entry_set.filter(status=Entry.LIVE_STATUS)
 
     class Meta:

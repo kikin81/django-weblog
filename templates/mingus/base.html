@@ -5,8 +5,6 @@
   <title>Blog: {% block title %}{% endblock title %}</title>
   <meta name="description" content="Personal Weblog">
 
-  <link rel="stylesheet" href="css/style.css">
-
 </head>
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
@@ -16,7 +14,7 @@
     <h1>Blog</h1>
     <nav>
       <ul>
-        <li><a href="">Entries</a></li>
+        <li><a href="{% url mingus_entries_index %}">Entries</a></li>
         <li><a href="{% url mingus_tag_list %}">Tags</a></li>
       </ul>
     </nav>
