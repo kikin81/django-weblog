@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tiny_mce/(?P<path>.*)$', 'django.views.static.serve', 
         { 'document_root': settings.PROJECT_ROOT + '../public/js/tiny_mce/' }),
-    # url(r'', 'mingus.views.entries_index'),
+    url(r'', include('mingus.urls.entries')),
 )

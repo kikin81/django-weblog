@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Entries index</title>
+</head>
+<body>
+    <h1>Entries index</h1>
+    {% for entry in entries %}
+        <h2>{{ entry.title }}</h2>
+        <p>Published on {{ entry.pub_date|date:"F j, Y" }}</p>
+        {% if entry.excerpt_html %}
+            {{ entry.excerpt_html|safe }}
+        {% else %}
+            {{ entry.body_html|truncatewords_html:"50"|safe }}
+        {% endif %}
+        <p><a href="{{ entry.get_absolute_url }}">Read full entry</a></p>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if entries.has_previous %}
+                <a href="?page={{ entries.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ entries.number }} of {{ entries.paginator.num_pages }}.
+            </span>
+
+            {% if entries.has_next %}
+                <a href="?page={{ entries.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+</body>
+</html>

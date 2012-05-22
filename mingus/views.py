@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from mingus.models import Entry
 
 def entries_index(request):
-    entry_list = Entry.objects.all()
+    entry_list = Entry.live.all()
     paginator = Paginator(entry_list, 3) # Show 3 entries per page
 
     page = request.GET.get('page')
