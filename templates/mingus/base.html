@@ -14,6 +14,10 @@
     <h1>Blog</h1>
     <nav>
       <ul>
+        {% if user.is_staff %}
+          <li><a href="{% url admin:index %}">Admin</a></li>
+          <li><a href="{% url admin:mingus_entry_add %}">Add post</a></li>
+        {% endif %}
         <li><a href="{% url mingus_entries_index %}">Entries</a></li>
         <li><a href="{% url mingus_tag_list %}">Tags</a></li>
       </ul>

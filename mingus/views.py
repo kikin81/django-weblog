@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from mingus.models import Entry, Tag
 
 def entries_index(request):
+    """Main listing."""
     entry_list = Entry.live.all()
     paginator = Paginator(entry_list, 3) # Show 3 entries per page
 

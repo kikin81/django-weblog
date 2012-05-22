@@ -7,4 +7,20 @@
     <article>
         {{ object.body_html|safe }}
     </article>
+
+    <h2>Comments</h2>
+    {% load comments %}
+    {% load markup %}
+    {% get_comment_list for object as comment_list %}
+    
+    {% for comment in comment_list %}
+        <p><strong>On {{ comment.submit_date|date:"F j, Y" }}, {{ comment.name }} said:</strong></p>
+    
+        {{ comment.comment|markdown:"safe" }}
+    {% endfor %}
+    
+    <h2>Post a comment</h2>
+        
+    {% render_comment_form for object %}
+    
 {% endblock content %}
