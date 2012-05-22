@@ -10,14 +10,19 @@ class Tag(models.Model):
                             help_text='Suggested valu automatically generated from title. Must be uniqe.')
     description = models.TextField()
 
+    def live_entry_set(self):
+        from coltrane.models import Entry
+        return self.entry_set.filter(status=Entry.LIVE_STATUS)
+
     class Meta:
         ordering = ['title']
 
     def __unicode__(self):
         return self.title
 
-    def get_absoulte_url(self):
-        return "/tags/%s/" % self.slug
+    @models.permalink
+    def get_absolute_url(self):
+        return ('mingus_category_detail', (), { 'slug': self.slug })
 
 class LiveEntryManager(models.Manager):
     def get_query_set(self):
@@ -74,6 +79,9 @@ class Entry(models.Model):
             self.excerpt_html = markdown(self.excerpt)
         super(Entry, self).save(force_insert, force_update)
 
+    @models.permalink
     def get_absolute_url(self):
-        return "%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
-    
+        return ('mingus_entry_detail', (), {  'year': self.pub_date.strftime("%Y"),
+                                                'month': self.pub_date.strftime("%b").lower(),
+                                                'day': self.pub_date.strftime("%d"),
+                                                'slug': self.slug })

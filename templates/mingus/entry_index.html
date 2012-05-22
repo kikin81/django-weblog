@@ -1,9 +1,8 @@
-<html>
-<head>
-    <title>Entries index</title>
-</head>
-<body>
-    <h1>Entries index</h1>
+{% extends "mingus/base_entries.html" %}
+
+{% block title %} | Latest entries{% endblock title %}
+
+{% block content %}
     {% for entry in entries %}
         <h2>{{ entry.title }}</h2>
         <p>Published on {{ entry.pub_date|date:"F j, Y" }}</p>
@@ -30,6 +29,5 @@
             {% endif %}
         </span>
     </div>
-
-</body>
-</html>
+    
+{% endblock content %}

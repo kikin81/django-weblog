@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Blog: {% block title %}{% endblock title %}</title>
+  <meta name="description" content="Personal Weblog">
+
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="{% block bodyclass %}{% endblock bodyclass %}">
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  <header>
+    <h1>Blog</h1>
+    <nav>
+      <ul>
+        <li><a href="">Entries</a></li>
+        <li><a href="{% url mingus_tag_list %}">Tags</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div role="main">
+    <div id="content">
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </div>
+  <footer>
+
+  </footer>
+
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+</body>
+</html>

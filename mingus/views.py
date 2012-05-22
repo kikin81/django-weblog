@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render_to_response
-from mingus.models import Entry
+from mingus.models import Entry, Tag
 
 def entries_index(request):
     entry_list = Entry.live.all()
@@ -17,3 +17,9 @@ def entries_index(request):
         entries = paginator.page(paginator.num_pages)
 
     return render_to_response('mingus/entry_index.html', {"entries": entries})
+
+def tag_detail(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    return object_list(request, queryset=tag.live_entry_set(), extra_context={
+        'tag': tag
+    })
