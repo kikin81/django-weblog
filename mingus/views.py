@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from mingus.models import Entry, Tag
 from django.views.generic.list_detail import object_list
@@ -7,7 +9,6 @@ def entries_index(request):
     """Main listing."""
     entry_list = Entry.live.all()
     paginator = Paginator(entry_list, 3) # Show 3 entries per page
-
     page = request.GET.get('page')
     try:
         entries = paginator.page(page)
@@ -18,7 +19,14 @@ def entries_index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         entries = paginator.page(paginator.num_pages)
 
-    return render_to_response('mingus/entry_index.html', {"entries": entries})
+    if request.user.is_authenticated():
+        # Do something for logged-in users.
+        return render_to_response('mingus/entry_index.html',
+                                  {"entries": entries},
+                                  context_instance=RequestContext(request))
+    else:
+        # Do something for anonymous users.
+        return render_to_response('mingus/entry_index.html', {"entries": entries})
 
 def tag_detail(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
@@ -26,6 +34,7 @@ def tag_detail(request, slug):
         'tag': tag
     })
 
+@login_required
 def create_entry(request):
     """Create view"""
     # Check to see if user is loged in

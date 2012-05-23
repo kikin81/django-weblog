@@ -32,9 +32,14 @@
   <aside>
     <!-- Sidebar -->
     <section>
-      <a href="/accounts/login/">Login</a>
-      <a href="/accounts/logout/">Logout</a>
-      <a href="/create/">New Entry</a>
+      {% if user.is_authenticated %}
+        <a href="/accounts/logout/">Logout</a>
+        <a href="/create/">New Entry</a>
+        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+      {% else %}
+        <a href="/accounts/login/">Login</a>
+        <p>Welcome, new user. Please log in.</p>
+      {% endif %}
     </section>
     <section>
       <form method="get" action="/search/">
