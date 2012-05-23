@@ -1,6 +1,12 @@
+"""
+URLS for blog_entries
+"""
 from django.conf.urls.defaults import *
+from django.conf import settings
 
 from mingus.models import Entry
+
+PAGINATE_BY = getattr(settings, 'BLOG_ENTIRES_PAGINATE_BY', 15)
 
 entry_info_dict = {
     'queryset': Entry.live.all(),
@@ -31,12 +37,12 @@ urlpatterns = patterns('django.views.generic.date_based',
 )
 
 urlpatterns += patterns('',
-    url(r'create/$',
+    url(r'^$',
+        'mingus.views.entries_index',
+        {'paginate_by': PAGINATE_BY},
+        'mingus_entries_index'),
+    url(r'^create/$',
         'mingus.views.create_entry',
         {},
         'mingus_create_entry'),
-    url(r'^$',
-        'mingus.views.entries_index',
-        {},
-        'mingus_entries_index'),
 )

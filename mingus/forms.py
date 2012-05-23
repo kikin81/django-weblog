@@ -15,12 +15,6 @@ class EntryForm(forms.Form):
     #slug unique-generated from title
     #tags query-all-tags
     title = forms.CharField(max_length=250)
-    excerpt = forms.CharField()
-    body = forms.TextField()
-    pub_date = forms.DateField(initial=datetime.date.today)
-    enable_comments = forms.BooleanField()
-    featured = forms.BooleanField()
-    status = 
 
 
     def save(self):

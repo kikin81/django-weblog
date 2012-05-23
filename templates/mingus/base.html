@@ -34,7 +34,7 @@
     <section>
       {% if user.is_authenticated %}
         <a href="/accounts/logout/">Logout</a>
-        <a href="/create/">New Entry</a>
+        <a href="{% url admin:mingus_entry_add %}">New Entry</a>
         <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
       {% else %}
         <a href="/accounts/login/">Login</a>

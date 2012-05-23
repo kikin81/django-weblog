@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Join the bixly blog</h1>
  
-    <form action="" method="post">
+    <form action="" method="post">{% csrf_token %}
         <div>
             {{ form.username.errors }}
             <label for="id_username">Username: </label>

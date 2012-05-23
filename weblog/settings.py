@@ -7,6 +7,8 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+BLOG_ENTIRES_PAGINATE_BY = 3
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -162,5 +164,10 @@ LOGGING = {
     }
 }
 
-EMAIL_HOST = "localhost"
-EMAIL_PORT = 1025
+EMAIL_HOST = 'mail.franciscovelazquez.com'
+EMAIL_PORT = '587'
+DEFAULT_FROM_EMAIL = 'admin@franciscovelazquez.com'
+EMAIL_HOST_USER = 'admin@franciscovelazquez.com'
+EMAIL_HOST_PASSWORD = 'hQ727F23'
+SERVER_EMAIL = "admin@franciscovelazquez.com"
+EMAIL_USE_TLS = False

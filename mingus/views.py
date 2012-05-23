@@ -4,11 +4,12 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from mingus.models import Entry, Tag
 from django.views.generic.list_detail import object_list
+from forms import EntryForm
 
-def entries_index(request):
+def entries_index(request, paginate_by):
     """Main listing."""
     entry_list = Entry.live.all()
-    paginator = Paginator(entry_list, 3) # Show 3 entries per page
+    paginator = Paginator(entry_list, paginate_by) # Show 3 entries per page
     page = request.GET.get('page')
     try:
         entries = paginator.page(page)
@@ -36,9 +37,14 @@ def tag_detail(request, slug):
 
 @login_required
 def create_entry(request):
-    """Create view"""
-    # Check to see if user is loged in
+    """Create new entry."""
     if request.method == 'POST':
-        return True
+        form = EntryForm(request.POST)
+        if form.is_valid():
+            new_entry = form.save()
+            return HttpResponseRedirect("/")
     else:
-        return False
+        form = EntryForm()
+
+    return render_to_response("/mingus/create_entry.html",
+                              {"form": form,})

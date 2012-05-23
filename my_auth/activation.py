@@ -8,7 +8,7 @@ def send_activation(user):
     code = md5(user.username).hexdigest()
     url = "http://127.0.0.1:8000/activate/?user=%s&code=%s" % (user.username,  code)
     print(url)
-    template = loader.get_template('accounts/registration/activation.html')
+    template = loader.get_template('registration/activation.html')
     context = Context({
         'username': user.username, 
         'url': url, 
