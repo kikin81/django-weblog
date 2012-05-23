@@ -1,6 +1,9 @@
 {% extends "mingus/base.html" %}
+
+{% block title %}Login{% endblock title %}
  
 {% block content %}
+    <h2>Login</h2>
     {% if form.errors %}
         <p class="error">Oops, invalid username or password</p>
     {% endif %}
@@ -9,4 +12,7 @@
         {{ form.as_p }}
         <input type="submit" value="login" />
     </form>
+
+    <p>Not registered yet? Register <a href="/accounts/register/">now</a>.
+
 {% endblock %}
