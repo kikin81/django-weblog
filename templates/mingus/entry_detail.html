@@ -3,24 +3,50 @@
 {% block title %}{{ block.super }} | {{ object.title }}{% endblock title %}
 
 {% block content %}
+<article class="blogPost">
+    <header>
     <h2>{{ object.title }}</h2>
-    <article>
-        {{ object.body_html|safe }}
-    </article>
+    <p>Published on {{ object.pub_date|date:"F j, Y" }} by {{ object.author }} - <a href="#comments"> {% load comments %} {% get_comment_count for object as comment_count %} {{ comment_count }} comment{{ comment_count|pluralize }}.</a></p>
+    </header>
+    {{ object.body_html|safe }}
+</article>
 
-    <h2>Comments</h2>
+<section id="comments">
+    <h3>Comments</h3>
     {% load comments %}
     {% load markup %}
     {% get_comment_list for object as comment_list %}
-    
     {% for comment in comment_list %}
-        <p><strong>On {{ comment.submit_date|date:"F j, Y" }}, {{ comment.name }} said:</strong></p>
-    
-        {{ comment.comment|markdown:"safe" }}
+        <article>
+            <header>
+                <a href="#">{{ comment.name }}</a> on {{ comment.submit_date|date:"F j, Y" }}
+            </header>
+            <p>{{ comment.comment|markdown:"safe" }}</p>
+        </article>
     {% endfor %}
-    
-    <h2>Post a comment</h2>
+
+    <h3>Post a comment</h3>
         
     {% render_comment_form for object %}
-    
+</section>
+
 {% endblock content %}
+
+{% block sidebar %}
+    <section>
+    <header>
+        <h3>Tags</h3>
+    </header>
+    {% if object.tags.count %}
+        <p>This entry is part of the tag{{ object.tags.count|pluralize }}</p>
+            {% for tag in object.tags.all %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+                {% if forloop.last %}{% else %}
+                    {% ifequal forloop.revcounter0 1 %}and {% else %}, {% endifequal %}
+                {% endif %}
+            {% endfor %}
+    {% else %}
+        <p>This entry isn't part of any tags.</p>
+    {% endif %}
+    </section>
+{% endblock sidebar %}

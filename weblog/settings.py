@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'mingus',
+    'my_auth',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -159,3 +160,6 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025

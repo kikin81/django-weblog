@@ -4,14 +4,18 @@
 
 {% block content %}
     {% for entry in entries %}
+    <article class="blogPost">
+        <header>
         <h2>{{ entry.title }}</h2>
         <p>Published on {{ entry.pub_date|date:"F j, Y" }}</p>
+        </header>
         {% if entry.excerpt_html %}
             {{ entry.excerpt_html|safe }}
         {% else %}
             {{ entry.body_html|truncatewords_html:"50"|safe }}
         {% endif %}
         <p><a href="{{ entry.get_absolute_url }}">Read full entry</a></p>
+    </article>
     {% endfor %}
 
     <div class="pagination">
