@@ -31,6 +31,11 @@
   <aside>
     <!-- Sidebar -->
     <section>
+      <a href="/accounts/login/">Login</a>
+      <a href="/accounts/logout/">Logout</a>
+      <a href="{% url mingus_entry_create %}">New Entry</a>
+    </section>
+    <section>
       <form method="get" action="/search/">
         <p><label for="id_q">Search:</label>
         <input type="text" name="q" id="id_q" value="{{ query }}" />
