@@ -8,11 +8,17 @@ urlpatterns = patterns('',
 
     url(r'^tiny_mce/(?P<path>.*)$', 'django.views.static.serve', 
         { 'document_root': settings.PROJECT_ROOT + '/js/tiny_mce/' }),
+
     url(r'^css/(?P<path>.*)$', 'django.views.static.serve', 
         { 'document_root': settings.PROJECT_ROOT + '/css/' }),
 
+    url(r'^search/$', 'weblog.search.views.search'),
+
     url(r'^comments', include('django.contrib.comments.urls')),
+
     url(r'^tags/$', include('mingus.urls.tags')),
+
     url(r'^accounts/',  include('my_auth.urls')),
+
     url(r'', include('mingus.urls.entries')),
 )

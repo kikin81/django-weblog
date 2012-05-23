@@ -310,7 +310,16 @@ aside section {
                 text-decoration: underline;
             }
 
+/*------------------------------
+=SEARCH
+------------------------------*/
+#id_q {
+    width:120px;
+}
 
+#submitQ{
+    margin: 0;
+}
 
 /*------------------------------
 =FOOTER

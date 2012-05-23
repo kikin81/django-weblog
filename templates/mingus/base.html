@@ -30,6 +30,13 @@
     </div>
   <aside>
     <!-- Sidebar -->
+    <section>
+      <form method="get" action="/search/">
+        <p><label for="id_q">Search:</label>
+        <input type="text" name="q" id="id_q" value="{{ query }}" />
+        <input type="submit" id="submitQ" value="Submit" /></p>
+      </form>
+    </section>
     {% block sidebar %}
     {% endblock sidebar %}
   </aside>

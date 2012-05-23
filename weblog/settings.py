@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mingus',
     'my_auth',
+    'weblog.search',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
