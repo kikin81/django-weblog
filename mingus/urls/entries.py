@@ -31,7 +31,11 @@ urlpatterns = patterns('django.views.generic.date_based',
 )
 
 urlpatterns += patterns('',
-    url(r'',
+    url(r'create/$',
+        'mingus.views.create_entry',
+        {},
+        'mingus_create_entry'),
+    url(r'^$',
         'mingus.views.entries_index',
         {},
         'mingus_entries_index'),

@@ -18,6 +18,7 @@
     <ul>
       <li><a href="{% url mingus_entries_index %}">Entries</a></li>
       <li><a href="{% url mingus_tag_list %}">Tags</a></li>
+      <li><a href="/2012/">Archive</a></li>
     </ul>
   </nav>
   <div id="content">
@@ -33,7 +34,7 @@
     <section>
       <a href="/accounts/login/">Login</a>
       <a href="/accounts/logout/">Logout</a>
-      <a href="{% url mingus_entry_create %}">New Entry</a>
+      <a href="/create/">New Entry</a>
     </section>
     <section>
       <form method="get" action="/search/">

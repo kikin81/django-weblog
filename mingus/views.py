@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from mingus.models import Entry, Tag
+from django.views.generic.list_detail import object_list
 
 def entries_index(request):
     """Main listing."""
@@ -24,3 +25,11 @@ def tag_detail(request, slug):
     return object_list(request, queryset=tag.live_entry_set(), extra_context={
         'tag': tag
     })
+
+def create_entry(request):
+    """Create view"""
+    # Check to see if user is loged in
+    if request.method == 'POST':
+        return True
+    else:
+        return False

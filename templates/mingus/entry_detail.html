@@ -29,7 +29,6 @@
         
     {% render_comment_form for object %}
 </section>
-
 {% endblock content %}
 
 {% block sidebar %}
@@ -38,7 +37,7 @@
         <h3>Tags</h3>
     </header>
     {% if object.tags.count %}
-        <p>This entry is part of the tag{{ object.tags.count|pluralize }}</p>
+        <p>This entry is is tagged with </p>
             {% for tag in object.tags.all %}
                 <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
                 {% if forloop.last %}{% else %}
@@ -46,7 +45,7 @@
                 {% endif %}
             {% endfor %}
     {% else %}
-        <p>This entry isn't part of any tags.</p>
+        <p>This entry doesn't have any tags.</p>
     {% endif %}
     </section>
 {% endblock sidebar %}

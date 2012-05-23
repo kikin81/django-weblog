@@ -7,7 +7,7 @@ class Tag(models.Model):
     title = models.CharField(max_length=250,
                              help_text='Maximum 250 characters.')
     slug = models.SlugField(unique=True,
-                            help_text='Suggested valu automatically generated from title. Must be uniqe.')
+                            help_text='Suggested value automatically generated from title. Must be uniqe.')
     description = models.TextField()
 
     def live_entry_set(self):
@@ -22,7 +22,7 @@ class Tag(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('mingus_category_detail', (), { 'slug': self.slug })
+        return ('mingus_tag_detail', (), { 'slug': self.slug })
 
 class LiveEntryManager(models.Manager):
     def get_query_set(self):

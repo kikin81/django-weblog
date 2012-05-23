@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 
     url(r'^comments', include('django.contrib.comments.urls')),
 
-    url(r'^tags/$', include('mingus.urls.tags')),
+    url(r'^tags/', include('mingus.urls.tags')),
 
     url(r'^accounts/',  include('my_auth.urls')),
 
