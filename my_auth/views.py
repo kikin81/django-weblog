@@ -15,7 +15,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect("/")
+            return render_to_response("registration/registration_complete.html")
     else:
         form = RegisterForm()
 
@@ -27,6 +27,6 @@ def activate(request):
     code = request.GET.get('code')
 
     if activate_user(user, code):
-        return HttpResponseRedirect("/")
+        return render_to_response("registration/activation_complete.html")
     else:
         raise Http404
