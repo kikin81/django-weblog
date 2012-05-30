@@ -46,5 +46,5 @@ def create_entry(request):
     else:
         form = EntryForm()
 
-    return render_to_response("/mingus/create_entry.html",
+    return render_to_response("mingus/create_entry.html",
                               {"form": form,})
