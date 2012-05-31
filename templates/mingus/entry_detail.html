@@ -11,7 +11,8 @@
     {{ object.body_html|safe }}
 </article>
 
-<section id="comments">
+{% if object.enable_comments %}
+    <section id="comments">
     <h3>Comments</h3>
     {% load comments %}
     {% load markup %}
@@ -27,7 +28,8 @@
 
     <h3>Post a comment</h3>
     {% render_comment_form for object %}
-</section>
+    </section>
+{% endif %}
 {% endblock content %}
 
 {% block sidebar %}
