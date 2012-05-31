@@ -1,17 +1,16 @@
 {% extends "mingus/base.html" %}
-
-{{ media }}
-<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-tinyMCE.init({
-    mode: "textareas",
-    theme: "simple"
-});
-</script>
+{% load staticfiles %}
 
 {% block title %} | Create Entry{% endblock title %}
  
 {% block content %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript">
+    tinyMCE.init({
+        mode: "textareas",
+        theme: "advanced"
+    });
+    </script>
     <h2>Create Entry</h2>
     <p>Use the form below to create a blog entry.</p>
 
