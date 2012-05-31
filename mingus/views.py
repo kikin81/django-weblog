@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import HttpResponseRedirect, render_to_response, get_object_or_404
 from mingus.models import Entry, Tag
 from django.views.generic.list_detail import object_list
 from forms import EntryForm
+from django.template.defaultfilters import slugify
 
 def entries_index(request, paginate_by):
     """Main listing."""
@@ -39,12 +41,20 @@ def tag_detail(request, slug):
 def create_entry(request):
     """Create new entry."""
     if request.method == 'POST':
-        form = EntryForm(request.POST)
+        try:
+            user = User.objects.get(username = request.user)
+            new_entry = Entry(author=user)
+            form = EntryForm(request.POST, instance=new_entry)
+        except User.DoesNotExist:
+            return HttpResponse("Invalid username")
         if form.is_valid():
-            new_entry = form.save()
+            new_entry = form.save(commit=False)
+            new_entry.slug = slugify(new_entry.title)
+            new_entry.save()
             return HttpResponseRedirect("/")
     else:
         form = EntryForm()
 
     return render_to_response("mingus/create_entry.html",
-                              {"form": form,})
+                              {"form": form,},
+                              context_instance=RequestContext(request))

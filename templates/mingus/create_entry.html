@@ -1,9 +1,23 @@
 {% extends "mingus/base.html" %}
 
-{% block title %}Create Entry{% endblock title %}
+{{ media }}
+<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+    mode: "textareas",
+    theme: "simple"
+});
+</script>
+
+{% block title %} | Create Entry{% endblock title %}
  
 {% block content %}
     <h2>Create Entry</h2>
     <p>Use the form below to create a blog entry.</p>
+
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" />
+    </form>
     
 {% endblock %}
