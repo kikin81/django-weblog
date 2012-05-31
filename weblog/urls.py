@@ -1,19 +1,16 @@
 from django.conf.urls import patterns, include, url
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import settings
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^css/(?P<path>.*)$', 'django.views.static.serve', 
-        { 'document_root': settings.PROJECT_ROOT + '/css/' }),
+    url(r'^comments/', include('django.contrib.comments.urls')),
 
-    url(r'^search/$', 'weblog.search.views.search'),
-
-    url(r'^comments', include('django.contrib.comments.urls')),
+    url(r'^search/$', 'mingus.views.search'),
 
     url(r'^tags/', include('mingus.urls.tags')),
 

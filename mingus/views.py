@@ -1,15 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.template import RequestContext
 from django.shortcuts import HttpResponseRedirect, render_to_response, get_object_or_404
-from mingus.models import Entry, Tag
+from django.template import RequestContext
+from django.template.defaultfilters import slugify
 from django.views.generic.list_detail import object_list
 from forms import EntryForm
-from django.template.defaultfilters import slugify
+from mingus.models import Entry, Tag
 
 def entries_index(request, paginate_by):
-    """Main listing."""
+    """
+    Main listing:
+      Displays live entries and paginates by the static variable paginate_by
+    """
     entry_list = Entry.live.all()
     paginator = Paginator(entry_list, paginate_by) # Show 3 entries per page
     page = request.GET.get('page')
@@ -32,6 +35,10 @@ def entries_index(request, paginate_by):
         return render_to_response('mingus/entry_index.html', {"entries": entries})
 
 def tag_detail(request, slug):
+    """
+    Tag detail:
+      Displays live tags.
+    """
     tag = get_object_or_404(Tag, slug=slug)
     return object_list(request, queryset=tag.live_entry_set(), extra_context={
         'tag': tag
@@ -39,7 +46,11 @@ def tag_detail(request, slug):
 
 @login_required
 def create_entry(request):
-    """Create new entry."""
+    """
+    Create entry:
+      Model form which automatically fills in the author and uses slugify to 
+      create a slug for the entry based on the tittle.
+    """
     if request.method == 'POST':
         try:
             user = User.objects.get(username = request.user)
@@ -58,3 +69,18 @@ def create_entry(request):
     return render_to_response("mingus/create_entry.html",
                               {"form": form,},
                               context_instance=RequestContext(request))
+
+def search(request):
+    query = request.GET.get('q', '')
+    keyword_results = []
+    results = []
+    if query:
+        keyword_results = FlatPage.objects.filter(searchkeyword__keyword__in=query.split()).distinct()
+        if keyword_results.count() == 1:
+            return HttpResponseRedirect(keyword_results[0].get_absolute_url())
+        results = FlatPage.objects.filter(content__icontains=query)
+    return render_to_response('mingus/search.html', {
+        'query': query,
+        'keyword_results': keyword_results,
+        'results': results
+    });

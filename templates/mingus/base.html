@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+  {% load staticfiles %}
   <meta charset="utf-8">
   <title>Blog: {% block title %}{% endblock title %}</title>
   <meta name="description" content="Personal Weblog">
-  {{ media }}
-  <link rel="stylesheet" href="/css/weblog/weblog.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{% static "css/weblog/weblog.css" %}" type="text/css" media="screen" />
 </head>
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.

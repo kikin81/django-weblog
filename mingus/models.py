@@ -1,7 +1,8 @@
-import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from markdown import markdown
+
+import datetime
 
 class Tag(models.Model):
     title = models.CharField(max_length=250,
@@ -85,3 +86,10 @@ class Entry(models.Model):
                                                 'month': self.pub_date.strftime("%b").lower(),
                                                 'day': self.pub_date.strftime("%d"),
                                                 'slug': self.slug })
+
+class SearchKeyword(models.Model):
+    keyword = models.CharField(max_length=50)
+    page = models.ForeignKey(Entry)
+    
+    def __unicode__(self):
+        return self.keyword
