@@ -29,6 +29,10 @@
     <h3>Post a comment</h3>
     {% render_comment_form for object %}
     </section>
+{% else %}
+    <section id="comments">
+    <h3>Comments have been disabled for this entry</h3>
+    </section>
 {% endif %}
 {% endblock content %}
 

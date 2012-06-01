@@ -34,7 +34,12 @@
     <section>
       {% if user.is_authenticated %}
         <a href="/accounts/logout/">Logout</a>
-        <a href="{% url admin:mingus_entry_add %}">New Entry</a>
+        {% if user.is_staff %}
+          <a href="{% url admin:mingus_entry_add %}">New Entry</a>
+        {% else %}
+          <a href="{% url mingus_create_entry %}">New Entry</a>
+        {% endif %}
+
         <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
       {% else %}
         <a href="/accounts/login/">Login</a>
