@@ -9,9 +9,4 @@ class EntryForm(ModelForm):
     # if the request is successful, add it to the "list"
     class Meta:
         model = Entry
-        exclude = ('author', 'slug',)
-
-class TagForm(ModelForm):
-
-    class Meta:
-        model = Tag
+        exclude = ('author', 'slug', 'tags',)

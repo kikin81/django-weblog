@@ -1,26 +1,28 @@
 {% extends "mingus/base.html" %}
 
-{% block title %} | Create Entry{% endblock title %}
- 
-{% block content %}
-    {% load staticfiles %}
-    <link type="text/css" href="{% static "css/overcast/jquery-ui-1.8.20.custom.css"%}" rel="Stylesheet" />
-    <link type="text/css" href="{% static "css/weblog/new_entry.css"%}" rel="Stylesheet" />
-    <script type="text/javascript" src="{% static "js/jquery-1.7.1.js"%}"></script>
-    <script type="text/javascript" src="{% static "js/jquery-ui-1.8.20.custom.min.js"%}"></script>
-    <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/new_entry.js" %}"></script>
+{% block headscripts %}
+{% load staticfiles %}
+  <link type="text/css" href="{% static "css/overcast/jquery-ui-1.8.20.custom.css"%}" rel="Stylesheet" />
+  <link type="text/css" href="{% static "css/weblog/new_entry.css"%}" rel="Stylesheet" />
+  <link rel="stylesheet" href="{% static "css/weblog/jquery.tagit.css"%}" type="text/css">
+  <script type="text/javascript" src="{% static "js/jquery-1.7.1.js"%}"></script>
+  <script type="text/javascript" src="{% static "js/jquery-ui-1.8.20.custom.min.js"%}"></script>
+  <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/new_entry.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/tag-it.js" %}" charset="utf-8"></script>
+{% endblock headscripts %}
 
+{% block title %} | Create Entry{% endblock title %}
+
+{% block content %}
     <h2>Create Entry</h2>
     <p>Use the form below to create a blog entry.</p>
-
     <form action="" method="post">{% csrf_token %}
         {{ form.as_p }}
         <p>
-            <label for="new-tag">New tag:</label>
-            <button id="new-tag">Add</button>
+          <label>Tags:</label>
+          <input type="text" id="mytags">
         </p>
         <p><input type="submit" value="Save" /></p>
     </form>
-    
 {% endblock %}

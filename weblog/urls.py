@@ -14,6 +14,8 @@ urlpatterns = patterns('',
 
     url(r'^tags/', include('mingus.urls.tags')),
 
+    url(r'^taglookup/$', 'mingus.views.tag_lookup'),
+
     url(r'^accounts/',  include('my_auth.urls')),
 
     url(r'', include('mingus.urls.entries')),

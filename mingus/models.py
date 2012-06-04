@@ -5,6 +5,8 @@ from markdown import markdown
 import datetime
 
 class Tag(models.Model):
+    """
+    """
     title = models.CharField(max_length=250,
                              help_text='Maximum 250 characters.')
     slug = models.SlugField(unique=True,
@@ -30,6 +32,12 @@ class LiveEntryManager(models.Manager):
         return super(LiveEntryManager, self).get_query_set().filter(status=self.model.LIVE_STATUS)
 
 class Entry(models.Model):
+    """
+    A blog entry that supports comments and tags.
+
+    # Create an entry
+    >>> entry = Entry.objects.create()
+    """
     LIVE_STATUS = 1
     DRAFT_STATUS = 2
     HIDDEN_STATUS = 3

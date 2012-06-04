@@ -6,6 +6,7 @@
   <title>Blog: {% block title %}{% endblock title %}</title>
   <meta name="description" content="Personal Weblog">
   <link rel="stylesheet" href="{% static "css/weblog/weblog.css" %}" type="text/css" media="screen" />
+  {% block headscripts %}{% endblock headscripts %}
 </head>
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.

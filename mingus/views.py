@@ -1,12 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
+from django.utils import simplejson
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic.list_detail import object_list
 from forms import EntryForm
 from mingus.models import Entry, Tag
+
 
 def entries_index(request, paginate_by):
     """
@@ -34,15 +39,6 @@ def entries_index(request, paginate_by):
         # Do something for anonymous users.
         return render_to_response('mingus/entry_index.html', {"entries": entries})
 
-def tag_detail(request, slug):
-    """
-    Tag detail:
-      Displays live tags.
-    """
-    tag = get_object_or_404(Tag, slug=slug)
-    return object_list(request, queryset=tag.live_entry_set(), extra_context={
-        'tag': tag
-    })
 
 @login_required
 def create_entry(request):
@@ -69,6 +65,30 @@ def create_entry(request):
     return render_to_response("mingus/create_entry.html",
                               {"form": form,},
                               context_instance=RequestContext(request))
+
+
+def tag_detail(request, slug):
+    """
+    Tag detail:
+      Displays live tags.
+    """
+    tag = get_object_or_404(Tag, slug=slug)
+    return object_list(request, queryset=tag.live_entry_set(), extra_context={
+        'tag': tag
+    })
+
+def tag_lookup(request):
+    # Default return list
+    results = []
+    if request.method == "GET":
+        if request.GET.has_key(u'q'):
+            value = request.GET[u'q']
+            # Ignore queries shorter than length 2
+            if len(value) > 2:
+               TI = Tag.objects.filter(name__startswith=value.lower())
+               results = [ x.name for x in TI]
+    return HttpResponse('\n'.join(results), mimetype='text/plain')
+
 
 def search(request):
     query = request.GET.get('q', '')
