@@ -1,12 +1,28 @@
 from mingus.models import Entry, Tag
+from mingus.widgets import MultipleSelectWithPop
 from django.forms import ModelForm
 from datetime import date
+from django import forms
+from django.contrib.comments.forms import CommentForm
+from francisco_utils import fields as francisco_utils
 
 class EntryForm(ModelForm):
-    # how to handle tags
-    # text entry with comma separated values?
-    # click a + and a pop up comes with the tag form
-    # if the request is successful, add it to the "list"
+    """
+    Take advantage of Django's model form which builds a form based on the 
+    model. Exclude the author and slug from the form as these will be
+    automatically calculated.
+    """
+    tags = forms.ModelMultipleChoiceField(Tag.objects, required=False, widget=MultipleSelectWithPop)
     class Meta:
         model = Entry
-        exclude = ('author', 'slug', 'tags',)
+        exclude = ('author', 'slug',)
+
+class TagForm(ModelForm):
+    """
+    Very simple Django Model form for the Tag model. Again, the slug field is
+    excluded and calculated automatically in the view by applying slugify on
+    the tag's title.
+    """
+    class Meta:
+        model = Tag
+        exclude = ('slug')

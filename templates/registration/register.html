@@ -3,29 +3,9 @@
 {% block title %} | Register{% endblock title %}
  
 {% block content %}
-    <h2>Join the bixly blog</h2>
- 
+    <h2>Join the blog</h2>
     <form action="" method="post">{% csrf_token %}
-        <div>
-            {{ form.username.errors }}
-            <label for="id_username">Username: </label>
-            {{ form.username }}
-        </div>
-        <div>
-            {{ form.email.errors }}
-            <label for="id_email">E-Mail: </label>
-            {{ form.email }}
-        </div>
-        <div>
-            {{ form.password1.errors }}
-            <label for="id_password1">Password: </label>
-            {{ form.password1 }}
-        </div>
-        <div>
-            {{ form.password2.errors }}
-            <label for="id_password2">Repeat password: </label>
-            {{ form.password2 }}
-        </div>
-        <input type="submit" value="Register" />
+        {{ form.as_p }}
+        <p><input type="submit" value="Save" /></p>
     </form>
 {% endblock %}

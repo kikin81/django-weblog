@@ -6,12 +6,12 @@ import datetime
 
 class Tag(models.Model):
     """
+    Tag Model with fields: title, slug
     """
     title = models.CharField(max_length=250,
                              help_text='Maximum 250 characters.')
     slug = models.SlugField(unique=True,
                             help_text='Suggested value automatically generated from title. Must be uniqe.')
-    description = models.TextField()
 
     def live_entry_set(self):
         from mingus.models import Entry
@@ -28,15 +28,18 @@ class Tag(models.Model):
         return ('mingus_tag_detail', (), { 'slug': self.slug })
 
 class LiveEntryManager(models.Manager):
+    """
+    A query that returns entries whose status is LIVE
+    """
     def get_query_set(self):
         return super(LiveEntryManager, self).get_query_set().filter(status=self.model.LIVE_STATUS)
 
 class Entry(models.Model):
     """
-    A blog entry that supports comments and tags.
-
-    # Create an entry
-    >>> entry = Entry.objects.create()
+    Entry Model with fields: title, excerpt, body, pub_date, excerpt_html,
+      body_html, author, enable_comments, featured, slug, status, tags,
+      objects, live.
+    Tags are associated with a Many-to-Many relationship.
     """
     LIVE_STATUS = 1
     DRAFT_STATUS = 2
@@ -96,6 +99,9 @@ class Entry(models.Model):
                                                 'slug': self.slug })
 
 class SearchKeyword(models.Model):
+    """
+    Keyword Model to speed up searches made on the Entries.
+    """
     keyword = models.CharField(max_length=50)
     page = models.ForeignKey(Entry)
     

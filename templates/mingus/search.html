@@ -5,18 +5,23 @@
 {% block content %}
     <h2>Search</h2>
     <p>You searched for "{{ query }}"; the results are listed below.</p>
-    <p>Found on title:
-    <ul>
-    {% for entry in resultTitle %}
-        <li><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></li>
-    {% endfor %}
-    </ul>
-    </p>
-    <p>Found on body:
-    <ul>
-    {% for entry in resultBody %}
-        <li><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></li>
-    {% endfor %}
-    </ul>
-    </p>
+    {% if resultTitle %}
+        <p>Found on title:
+        <ul>
+        {% for entry in resultTitle %}
+            <li><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></li>
+        {% endfor %}
+        </ul>
+        </p>
+    {% endif %}
+    {% if resultBody %}
+        <p>Found on body:
+        <ul>
+        {% for entry in resultBody %}
+            <li><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></li>
+        {% endfor %}
+        </ul>
+        </p>
+    {% endif %}
+
 {% endblock content %}

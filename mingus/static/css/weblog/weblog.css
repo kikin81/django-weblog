@@ -37,6 +37,16 @@ p {
     padding-bottom: 22px;
 }
 
+.errorlist {
+    color: #FF0000;
+}
+
+.helptext {
+    display:block;
+    font-size: 11px !important;
+    color: #999;
+}
+
 
 
 /*------------------------------
@@ -191,6 +201,45 @@ nav {
     margin: 22px 0;
     -webkit-box-shadow: 3px 3px 7px #777;
 }
+
+
+
+/*------------------------------
+=PAGINATION
+------------------------------*/
+.pagination {
+    float: left;
+    width: 558px;
+    color: black;
+    font-size: 12 px;
+    line-height: 18px;
+    padding: 30px;
+    display: block;
+    border-top: 1px solid #d7d7d7;
+}
+
+    .pagination .current {
+        float: right;
+        color: #A7A7A7;
+        width: 150px;
+        text-align: right;
+    }
+
+    .pagination a {
+        background: #E6E6E6 url("images/button.png") no-repeat;
+        padding: 5px 9px 4px 9px;
+        border: 1px solid #B3B3B3;
+        color: black !important;
+        margin-right: 4px;
+        text-shadow: 0 1px 0 white;
+        text-decoration: none !important;
+    }
+
+        .pagination a:hover {
+            color: #fff !important;
+            text-shadow: 0 1px 0 #333;
+            background: #31796C;
+        }
 
 
 

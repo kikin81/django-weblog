@@ -7,7 +7,7 @@
     <article class="blogPost">
         <header>
         <h2>{{ entry.title }}</h2>
-        <p>Published on {{ entry.pub_date|date:"F j, Y" }} by {{ entry.author }} - {% load comments %} {% get_comment_count for entry as comment_count %} {{ comment_count }} comment{{ comment_count|pluralize }}.</p>
+        <p>Published on {{ entry.pub_date|date:"F j, Y" }} by {{ entry.author }}{% if entry.enable_comments %} - {% load comments %} {% get_comment_count for entry as comment_count %} {{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}.</p>
         </header>
         {% if entry.excerpt_html %}
             {{ entry.excerpt_html|safe }}
@@ -21,7 +21,7 @@
     <div class="pagination">
         <span class="step-links">
             {% if entries.has_previous %}
-                <a href="?page={{ entries.previous_page_number }}">previous</a>
+                <a href="?page={{ entries.previous_page_number }}" class="previouspostslink">« prev</a>
             {% endif %}
 
             <span class="current">
@@ -29,7 +29,7 @@
             </span>
 
             {% if entries.has_next %}
-                <a href="?page={{ entries.next_page_number }}">next</a>
+                <a href="?page={{ entries.next_page_number }}" class="nextpostslink">» next</a>
             {% endif %}
         </span>
     </div>

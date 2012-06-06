@@ -1,0 +1,14 @@
+{% load staticfiles %}
+{% if multiple %}
+<script type="text/javascript">
+addEvent(window, "load", function(e) {
+SelectFilter.init("id_{{ field }}", "{{ field }}", 0, "/static/admin/");
+});
+</script>
+{% endif %}
+
+<a
+  href="/add/{{ field }}"
+  class="add-another"
+  id="add_id_{{ field }}"
+  onclick="return showAddAnotherPopup(this);"><img src="{% static "images/icon_addlink.gif"%}" width="10" height="10" alt="Add Another"/></a>

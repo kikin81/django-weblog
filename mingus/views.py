@@ -1,15 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
-from django.utils import simplejson
-from django.utils.datastructures import MultiValueDictKeyError
+from django.utils.html import escape
 from django.views.generic.list_detail import object_list
-from forms import EntryForm
+from forms import EntryForm, TagForm, forms
 from mingus.models import Entry, Tag
 
 
@@ -67,6 +65,38 @@ def create_entry(request):
                               context_instance=RequestContext(request))
 
 
+def handlePopAdd(request, addForm, field):
+    """
+    View that handles the popup-add (new object) form.
+    """
+    if request.method == "POST":
+        form = addForm(request.POST)
+        if form.is_valid():
+            try:
+                newObject = form.save(commit=False)
+                newObject.slug = slugify(newObject.title)
+                newObject.save()
+            except forms.ValidationError, error:
+                newObject = None
+            if newObject:
+                return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
+                    (escape(newObject._get_pk_val()), escape(newObject)))
+
+    else:
+        form = addForm()
+
+    pageContext = {'form': form, 'field': field}
+    return render_to_response("mingus/popup.html", pageContext, context_instance=RequestContext(request))
+
+@login_required
+def newTag(request):
+    """
+    View that handles a request for a new Tag.
+    Instanciates a TagForm and calls handlePopAdd view.
+    """
+    return handlePopAdd(request, TagForm, 'tags')
+
+
 def tag_detail(request, slug):
     """
     Tag detail:
@@ -77,30 +107,25 @@ def tag_detail(request, slug):
         'tag': tag
     })
 
-def tag_lookup(request):
-    # Default return list
-    results = []
-    if request.method == "GET":
-        if request.GET.has_key(u'q'):
-            value = request.GET[u'q']
-            # Ignore queries shorter than length 2
-            if len(value) > 2:
-               TI = Tag.objects.filter(name__startswith=value.lower())
-               results = [ x.name for x in TI]
-    return HttpResponse('\n'.join(results), mimetype='text/plain')
-
 
 def search(request):
+    """
+    Search View that handles blog entry search.
+    Searches on title and body.
+    """
     query = request.GET.get('q', '')
     keyword_results = []
-    results = []
+    resultTitle = []
+    resultBody = []
     if query:
-        keyword_results = FlatPage.objects.filter(searchkeyword__keyword__in=query.split()).distinct()
+        keyword_results = Entry.objects.filter(searchkeyword__keyword__in=query.split()).distinct()
         if keyword_results.count() == 1:
             return HttpResponseRedirect(keyword_results[0].get_absolute_url())
-        results = FlatPage.objects.filter(content__icontains=query)
+        resultTitle = Entry.objects.filter(title__icontains=query)
+        resultBody = Entry.objects.filter(body__icontains=query)
     return render_to_response('mingus/search.html', {
         'query': query,
         'keyword_results': keyword_results,
-        'results': results
+        'resultTitle': resultTitle,
+        'resultBody': resultBody,
     });

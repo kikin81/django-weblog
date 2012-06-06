@@ -3,9 +3,11 @@ from django import forms
 from django.contrib.auth.models import User
 from threading import Thread
 from activation import send_activation
+from francisco_utils import fields as francisco_utils
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(label="E-Mail")
+    recaptcha = francisco_utils.ReCaptchaField()
 
     def save(self):
         user = super(RegisterForm, self).save(commit=False)
