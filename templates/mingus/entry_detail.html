@@ -25,9 +25,9 @@
             <p>{{ comment.comment|markdown:"safe" }}</p>
         </article>
     {% endfor %}
-
     <h3>Post a comment</h3>
     {% render_comment_form for object %}
+    {% csrf_token %}
     </section>
 {% else %}
     <section id="comments">
