@@ -34,6 +34,7 @@ class LiveEntryManager(models.Manager):
     def get_query_set(self):
         return super(LiveEntryManager, self).get_query_set().filter(status=self.model.LIVE_STATUS)
 
+
 class Entry(models.Model):
     """
     Entry Model with fields: title, excerpt, body, pub_date, excerpt_html,
@@ -98,6 +99,7 @@ class Entry(models.Model):
                                                 'day': self.pub_date.strftime("%d"),
                                                 'slug': self.slug })
 
+
 class SearchKeyword(models.Model):
     """
     Keyword Model to speed up searches made on the Entries.
@@ -107,3 +109,31 @@ class SearchKeyword(models.Model):
     
     def __unicode__(self):
         return self.keyword
+
+
+from akismet import Akismet
+from django.conf import settings
+from django.contrib.comments.moderation import CommentModerator, moderator
+from django.contrib.sites.models import Site
+from django.utils.encoding import smart_str
+
+class EntryModerator(CommentModerator):
+    auto_moderate_field = 'pub_date'
+    moderate_after = 30
+    email_notification = True
+
+    def moderate(self, comment, content_object, request):
+        already_moderated = super(EntryModerator, self).moderate(comment, content_object, request)
+        if already_moderated:
+            return True
+        akismet_api = Akismet(key=settings.AKISMET_API_KEY, blog_url="http://%s/" %Site.objects.get_current().domain)
+        if akismet_api.verify_key():
+            akismet_data = { 'comment_type': 'comment',
+                             'referrer': request.META['HTTP_REFERER'],
+                             'user_ip': comment.ip_address,
+                             'user_agent': request.META['HTTP_USER_AGENT'] }
+            return akismet_api.comment_check(smart_str(comment.comment),
+                akismet_data,
+                build_data=True)
+        return False
+moderator.register(Entry, EntryModerator)

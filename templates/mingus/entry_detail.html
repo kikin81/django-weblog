@@ -22,10 +22,11 @@
             <header>
                 <a href="#">{{ comment.name }}</a> on {{ comment.submit_date|date:"F j, Y" }}
             </header>
+            <h3>{{ comment.title }}</h3>
             <p>{{ comment.comment|markdown:"safe" }}</p>
         </article>
     {% endfor %}
-    <h3>Post a comment</h3>
+    <h4>Post a comment</h4>
     {% render_comment_form for object %}
     {% csrf_token %}
     </section>
