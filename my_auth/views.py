@@ -1,12 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from django.http import Http404
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, Http404
-
-from activation import activate_user
-from hashlib import md5
+from django.views.decorators.csrf import csrf_exempt
 from forms import RegisterForm
+
 
 @csrf_exempt
 def register(request):
@@ -19,7 +15,8 @@ def register(request):
         form = RegisterForm()
 
     return render_to_response("registration/register.html",
-                              {"form": form,},)
+                              {"form": form, },)
+
 
 def activate(request):
     user = request.GET.get('user')

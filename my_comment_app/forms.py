@@ -3,9 +3,10 @@ from django.contrib.comments.forms import CommentForm
 from my_comment_app.models import CommentWithTitle
 from francisco_utils import fields as francisco_utils
 
+
 class CommentFormWithTitle(CommentForm):
-    title = forms.CharField(max_length=300)
-    recaptcha = francisco_utils.ReCaptchaField()
+    title = forms.CharField(max_length=300, label="Comment title")
+    recaptcha = francisco_utils.ReCaptchaField(label="Are you human?")
 
     def get_comment_model(self):
         # Use our custom comment model

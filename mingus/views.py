@@ -6,18 +6,23 @@ from django.shortcuts import HttpResponseRedirect, render_to_response, get_objec
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.utils.html import escape
-from django.views.generic.list_detail import object_list
 from forms import EntryForm, TagForm, forms
 from mingus.models import Entry, Tag
 
 
 def entries_index(request, paginate_by):
     """
-    Main listing:
-      Displays live entries and paginates by the static variable paginate_by
+    View of the latest entries published. This is similar to
+    the :view:'django.views.generic.date_based.archive_index'
+    generic view.
+    **Template**
+    ''mingus/entry_archive.html''
+    **Context:**
+    ''latest''
+      A list of :model'mingus.Entry' objects.
     """
     entry_list = Entry.live.all()
-    paginator = Paginator(entry_list, paginate_by) # Show 3 entries per page
+    paginator = Paginator(entry_list, paginate_by)  # Show 3 entries per page
     page = request.GET.get('page')
     try:
         entries = paginator.page(page)
@@ -38,16 +43,22 @@ def entries_index(request, paginate_by):
         return render_to_response('mingus/entry_index.html', {"entries": entries})
 
 
+def comment_posted(request):
+    """
+    """
+    return render_to_response('/')
+
+
 @login_required
 def create_entry(request):
     """
     Create entry:
-      Model form which automatically fills in the author and uses slugify to 
+      Model form which automatically fills in the author and uses slugify to
       create a slug for the entry based on the tittle.
     """
     if request.method == 'POST':
         try:
-            user = User.objects.get(username = request.user)
+            user = User.objects.get(username=request.user)
             new_entry = Entry(author=user)
             form = EntryForm(request.POST, instance=new_entry)
         except User.DoesNotExist:
@@ -61,7 +72,7 @@ def create_entry(request):
         form = EntryForm()
 
     return render_to_response("mingus/create_entry.html",
-                              {"form": form,},
+                              {"form": form, },
                               context_instance=RequestContext(request))
 
 
@@ -76,7 +87,7 @@ def handlePopAdd(request, addForm, field):
                 newObject = form.save(commit=False)
                 newObject.slug = slugify(newObject.title)
                 newObject.save()
-            except forms.ValidationError, error:
+            except forms.ValidationError:
                 newObject = None
             if newObject:
                 return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
@@ -87,6 +98,7 @@ def handlePopAdd(request, addForm, field):
 
     pageContext = {'form': form, 'field': field}
     return render_to_response("mingus/popup.html", pageContext, context_instance=RequestContext(request))
+
 
 @login_required
 def newTag(request):
@@ -103,9 +115,11 @@ def tag_detail(request, slug):
       Displays live tags.
     """
     tag = get_object_or_404(Tag, slug=slug)
-    return object_list(request, queryset=tag.live_entry_set(), extra_context={
-        'tag': tag
-    })
+    return render_to_response('mingus/tag_detail.html',
+                              {'object_list': tag.live_entry_set()})
+    # return object_list(request, queryset=tag.live_entry_set(), extra_context={
+    #     'tag': tag
+    # })
 
 
 def search(request):
@@ -128,4 +142,4 @@ def search(request):
         'keyword_results': keyword_results,
         'resultTitle': resultTitle,
         'resultBody': resultBody,
-    });
+    })

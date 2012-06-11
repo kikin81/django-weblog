@@ -8,6 +8,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^comments/posted/$', 'mingus.views.comment_posted'),
+
     url(r'^comments/', include('django.contrib.comments.urls')),
 
     url(r'^search/$', 'mingus.views.search'),

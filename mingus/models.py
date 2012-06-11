@@ -4,9 +4,11 @@ from markdown import markdown
 
 import datetime
 
+
 class Tag(models.Model):
     """
-    Tag Model with fields: title, slug
+    Stores a single tag, related to :model:`entry.tag`.
+
     """
     title = models.CharField(max_length=250,
                              help_text='Maximum 250 characters.')
@@ -14,6 +16,7 @@ class Tag(models.Model):
                             help_text='Suggested value automatically generated from title. Must be uniqe.')
 
     def live_entry_set(self):
+        """Filters tags that are related to live entries."""
         from mingus.models import Entry
         return self.entry_set.filter(status=Entry.LIVE_STATUS)
 
@@ -25,11 +28,13 @@ class Tag(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('mingus_tag_detail', (), { 'slug': self.slug })
+        return ('mingus_tag_detail', (), {'slug': self.slug})
+
 
 class LiveEntryManager(models.Manager):
     """
-    A query that returns entries whose status is LIVE
+    Filters entries that are marked with a live status.
+
     """
     def get_query_set(self):
         return super(LiveEntryManager, self).get_query_set().filter(status=self.model.LIVE_STATUS)
@@ -37,10 +42,8 @@ class LiveEntryManager(models.Manager):
 
 class Entry(models.Model):
     """
-    Entry Model with fields: title, excerpt, body, pub_date, excerpt_html,
-      body_html, author, enable_comments, featured, slug, status, tags,
-      objects, live.
-    Tags are associated with a Many-to-Many relationship.
+    Stores a single blog entry, related to :model:`auth.User`.
+
     """
     LIVE_STATUS = 1
     DRAFT_STATUS = 2
@@ -50,7 +53,7 @@ class Entry(models.Model):
         (DRAFT_STATUS, 'Draft'),
         (HIDDEN_STATUS, 'Hidden'),
     )
-    
+
     # Entry main fields.
     title = models.CharField(max_length=250,
                              help_text='Maximum 250 characters.')
@@ -72,20 +75,20 @@ class Entry(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES,
                                  default=LIVE_STATUS,
                                  help_text='Only entries with live status will be publicly displayed.')
-    
+
     # Categorization.
     tags = models.ManyToManyField(Tag)
 
     objects = models.Manager()
     live = LiveEntryManager()
-    
+
     class Meta:
         ordering = ['-pub_date']
         verbose_name_plural = "Entries"
 
     def __unicode__(self):
         return self.title
-    
+
     def save(self, force_insert=False, force_update=False):
         self.body_html = markdown(self.body)
         if self.excerpt:
@@ -94,19 +97,20 @@ class Entry(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('mingus_entry_detail', (), {  'year': self.pub_date.strftime("%Y"),
-                                                'month': self.pub_date.strftime("%b").lower(),
-                                                'day': self.pub_date.strftime("%d"),
-                                                'slug': self.slug })
+        return ('mingus_entry_detail', (), {'year': self.pub_date.strftime("%Y"),
+                                            'month': self.pub_date.strftime("%b").lower(),
+                                            'day': self.pub_date.strftime("%d"),
+                                            'slug': self.slug})
 
 
 class SearchKeyword(models.Model):
     """
-    Keyword Model to speed up searches made on the Entries.
+    Stores a keyword related to an :model:`entry`
+
     """
     keyword = models.CharField(max_length=50)
     page = models.ForeignKey(Entry)
-    
+
     def __unicode__(self):
         return self.keyword
 
@@ -117,7 +121,13 @@ from django.contrib.comments.moderation import CommentModerator, moderator
 from django.contrib.sites.models import Site
 from django.utils.encoding import smart_str
 
+
 class EntryModerator(CommentModerator):
+    """
+    Function that moderates comment entries by using Akismet and checking that
+    the blog entry date is not longer than 30 days.
+
+    """
     auto_moderate_field = 'pub_date'
     moderate_after = 30
     email_notification = True
@@ -126,12 +136,12 @@ class EntryModerator(CommentModerator):
         already_moderated = super(EntryModerator, self).moderate(comment, content_object, request)
         if already_moderated:
             return True
-        akismet_api = Akismet(key=settings.AKISMET_API_KEY, blog_url="http://%s/" %Site.objects.get_current().domain)
+        akismet_api = Akismet(key=settings.AKISMET_API_KEY, blog_url="http://%s/" % Site.objects.get_current().domain)
         if akismet_api.verify_key():
-            akismet_data = { 'comment_type': 'comment',
+            akismet_data = {'comment_type': 'comment',
                              'referrer': request.META['HTTP_REFERER'],
                              'user_ip': comment.ip_address,
-                             'user_agent': request.META['HTTP_USER_AGENT'] }
+                             'user_agent': request.META['HTTP_USER_AGENT']}
             return akismet_api.comment_check(smart_str(comment.comment),
                 akismet_data,
                 build_data=True)

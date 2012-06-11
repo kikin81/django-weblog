@@ -6,7 +6,13 @@ from django.utils.translation import ugettext_lazy as _
 from francisco_utils.widgets import ReCaptcha
 from recaptcha import captcha
 
+
 class ReCaptchaField(forms.CharField):
+    """
+    Form field for the reCaptcha plugin
+
+    """
+
     default_error_messages = {
         'captcha_invalid': _(u'Invalid captcha')
     }
