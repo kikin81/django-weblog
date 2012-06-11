@@ -4,7 +4,10 @@ $(function() {
     */
     tinyMCE.init({
         mode: "textareas",
-        theme: "simple"
+        theme: "advanced",
+        height: "380",
+        width: "400",
+        body_id : "elm1=my_id,elm2=my_id2"
     });
 
     /**

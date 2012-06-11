@@ -9,13 +9,18 @@
 }
 
 .selector h2 {
+    width: 258px;
     font-size: 10px;
     text-align: left;
     padding: 5px;
     line-height: 0px;
 }
 
-.selector .selector-filter label {
-    width: 26px;
-    padding: 2px;
+.selector-filter{
+    width: 262px;
+}
+
+.selector select {
+    margin-bottom: 10px;
+    margin-top: 0;
 }
